@@ -104,7 +104,7 @@ def check_solution(input_file, solution_file, draw=False):
     current_profit = 0.0
     for i in range(1, len(performed_tour)):
         current_time += math.ceil(math.sqrt(sum((vertices[prev][k]-vertices[performed_tour[i]][k])**2 for k in range(2)))) / (max_speed - v * current_capacity_of_knapsack)
-        print("%d %d %.5f %.5f" % (prev, performed_tour[i], current_time, max_time))
+        # print("%d %d %.5f %.5f" % (prev, performed_tour[i], current_time, max_time))
         current_capacity_of_knapsack += accumulate_weight[i]
         current_profit += accumulate_profit[i]
         prev = performed_tour[i]        
