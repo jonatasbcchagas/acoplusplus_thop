@@ -24,6 +24,7 @@ Parameters:
   -b, --beta            influence of heuristic information
   -e, --rho             pheromone trail evaporation
   -p, --ptries          number of tries to construct a packing plan from a give tour
+  -l, --localsearch     0: no local search   1: 2-opt   2: 2.5-opt   3: 3-opt
   -t, --time            maximum time for each trial  
       --seed            seed for the random number generator
       --log             save an extra file (<outputfile>.log) with log messages
