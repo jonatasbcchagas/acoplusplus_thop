@@ -70,8 +70,9 @@ random_seeds = [ 269070,  99470, 126489, 644764, 547617, 642580,  73456, 462018,
                  571216, 306614, 308010, 661191, 890429, 425031,  69108, 435783,  17725, 335928, ]
 
 def launcher(tsp_base, number_of_items_per_city, knapsack_type, knapsack_size, maximum_travel_time, repetition, runtime_factor="1t"):
-    inputfile = "../../instances/%s-thop/%s_%02d_%s_%02d_%02d.thop" % (tsp_base, tsp_base, number_of_items_per_city, knapsack_type, knapsack_size, maximum_travel_time)
-    outputfile = "../../solutions/aco++/%s-thop/%s_%02d_%s_%02d_%02d_%02d.thop.sol" % (tsp_base, tsp_base, number_of_items_per_city, knapsack_type, knapsack_size, maximum_travel_time, repetition+1)
+    if knapsack_size != "inf": knapsack_size = "%02d" % (knapsack_size, )
+    inputfile = "../../instances/%s-thop/%s_%02d_%s_%s_%02d.thop" % (tsp_base, tsp_base, number_of_items_per_city, knapsack_type, knapsack_size, maximum_travel_time)
+    outputfile = "../../solutions/aco++/%s-thop/%s_%02d_%s_%s_%02d_%02d.thop.sol" % (tsp_base, tsp_base, number_of_items_per_city, knapsack_type, knapsack_size, maximum_travel_time, repetition+1)
     parameter_configuration_key = "%s_%02d_%s" % (tsp_base, number_of_items_per_city, knapsack_type)
 
     os.system("./acothop --mmas --tries 1 --seed %d --time %.1f --inputfile %s --outputfile %s %s --log" % (random_seeds[repetition], \
@@ -91,7 +92,15 @@ if __name__ == "__main__":
     os.system("make")
 
     pool = multiprocessing.Pool(processes=max(1, multiprocessing.cpu_count() - 2))
-    
+
+    for _product in itertools.product(tsp_base, number_of_items_per_city, knapsack_type, knapsack_size, maximum_travel_time):
+        _tsp_base, _number_of_items_per_city, _knapsack_type, _knapsack_size, _maximum_travel_time = _product
+        for repetition in range(number_of_runs):
+            pool.apply_async(launcher, args=(_tsp_base, _number_of_items_per_city, _knapsack_type, _knapsack_size, _maximum_travel_time, repetition)) 
+
+    number_of_items_per_city = [1, ]
+    knapsack_size = ["inf", ]
+
     for _product in itertools.product(tsp_base, number_of_items_per_city, knapsack_type, knapsack_size, maximum_travel_time):
         _tsp_base, _number_of_items_per_city, _knapsack_type, _knapsack_size, _maximum_travel_time = _product
         for repetition in range(number_of_runs):
